@@ -1,0 +1,79 @@
+@page
+@model FichApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "Mi jornada";
+}
+
+<section class="dashboard">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">REGISTRO DE JORNADA</p>
+            <h1>Hola, @Model.EmployeeName</h1>
+            <p class="muted">Registra cada inicio, pausa y fin de tu jornada.</p>
+        </div>
+        <div class="today-card">
+            <span>Hoy</span>
+            <strong>@Model.TodayLabel</strong>
+            <span>@Model.TimeZoneLabel</span>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="notice notice-success" role="status">@Model.StatusMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="notice notice-error" role="alert">@Model.ErrorMessage</div>
+    }
+
+    <div class="work-card">
+        <div class="status-row">
+            <span class="status-dot @(Model.IsWorking ? "status-on" : "")"></span>
+            <div>
+                <strong>@Model.StateLabel</strong>
+                <p class="muted">@Model.StateDescription</p>
+            </div>
+        </div>
+        <div class="action-row">
+            @foreach (var action in Model.AvailableActions)
+            {
+                <form method="post" class="action-form">
+                    <button type="submit" name="type" value="@action.Type" class="@action.CssClass">
+                        @action.Label
+                    </button>
+                </form>
+            }
+        </div>
+        <p class="privacy-note">La hora se toma del servidor. No se recopila tu ubicación.</p>
+    </div>
+
+    <div class="section-heading">
+        <div>
+            <h2>Actividad reciente</h2>
+            <p class="muted">Tus fichajes, en hora local.</p>
+        </div>
+        <a class="text-link" asp-page="/Records">Ver todo el historial <span aria-hidden="true">→</span></a>
+    </div>
+
+    @if (Model.RecentEvents.Count == 0)
+    {
+        <div class="empty-state">Aún no hay fichajes. Cuando empieces, aparecerán aquí.</div>
+    }
+    else
+    {
+        <div class="event-list">
+            @foreach (var item in Model.RecentEvents)
+            {
+                <div class="event-row">
+                    <span class="event-marker">@item.Marker</span>
+                    <div class="event-copy">
+                        <strong>@item.Label</strong>
+                        <span>@item.DateLabel</span>
+                    </div>
+                    <time datetime="@item.IsoTime">@item.TimeLabel</time>
+                </div>
+            }
+        </div>
+    }
+</section>

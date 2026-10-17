@@ -1,0 +1,12 @@
+@page
+@model FichApp.Areas.Identity.Pages.Account.AccessDeniedModel
+@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<section class="dashboard narrow-dashboard">
+    <p class="eyebrow">PERMISOS DE LA CUENTA</p>
+    <h1>No tienes acceso a esta página</h1>
+    <p class="muted">Si necesitas permisos de administración, contacta con la empresa.</p>
+    <a asp-page="/Index" class="button button-primary mt-4">Volver a mi jornada</a>
+</section>

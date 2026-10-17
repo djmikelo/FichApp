@@ -1,0 +1,60 @@
+@page
+@model FichApp.Pages.Admin.ReportModel
+@{
+    ViewData["Title"] = "Informe de jornada";
+}
+
+<section class="dashboard">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">ADMINISTRACIÓN</p>
+            <h1>Informe de jornada</h1>
+            <p class="muted">Consulta y exporta los fichajes originales, sin modificaciones.</p>
+        </div>
+        <a class="button button-secondary" asp-page="/Admin/Employees">Gestionar empleados</a>
+    </div>
+
+    <form method="get" class="filter-bar">
+        <label>Desde <input type="date" name="from" value="@Model.From.ToString("yyyy-MM-dd")" /></label>
+        <label>Hasta <input type="date" name="to" value="@Model.To.ToString("yyyy-MM-dd")" /></label>
+        <button class="button button-primary" type="submit">Consultar</button>
+        <a class="button button-secondary" asp-page-handler="Export" asp-route-from="@Model.From.ToString("yyyy-MM-dd")" asp-route-to="@Model.To.ToString("yyyy-MM-dd")">Descargar CSV</a>
+    </form>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="notice notice-error" role="alert">@Model.ErrorMessage</div>
+    }
+
+    <div class="table-wrap">
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>Empleado</th>
+                    <th>Correo</th>
+                    <th>Fecha local</th>
+                    <th>Hora local</th>
+                    <th>Acción</th>
+                    <th>Zona horaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Events.Count == 0)
+                {
+                    <tr><td colspan="6" class="table-empty">No hay registros en este periodo.</td></tr>
+                }
+                @foreach (var item in Model.Events)
+                {
+                    <tr>
+                        <td>@item.EmployeeName</td>
+                        <td>@item.EmployeeEmail</td>
+                        <td>@item.Date</td>
+                        <td><time datetime="@item.IsoTime">@item.Time</time></td>
+                        <td>@item.Action</td>
+                        <td>@item.TimeZoneId</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="privacy-note">Conserva los registros durante al menos cuatro años y facilita su acceso a las personas trabajadoras, su representación legal y la Inspección de Trabajo.</p>
+</section>

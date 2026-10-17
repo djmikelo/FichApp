@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7f4" />
+    <title>@ViewData["Title"] · FichApp</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FichApp.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="app-header">
+        <nav class="navbar navbar-expand-sm">
+            <div class="container app-nav">
+                <a class="navbar-brand brand" asp-area="" asp-page="/Index"><span class="brand-mark">f</span>fichapp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Abrir navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav main-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Index">Fichar</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Records">Mi historial</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/ChangePassword">Contraseña</a></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Admin/Report">Informes</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Admin/Employees">Empleados</a></li>
+                            }
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container app-main" role="main">
+        @RenderBody()
+    </main>
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <span>FichApp <span aria-hidden="true">·</span> Registro responsable de jornada</span>
+            <a asp-area="" asp-page="/Privacy">Privacidad</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

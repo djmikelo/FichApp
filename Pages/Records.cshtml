@@ -1,0 +1,45 @@
+@page
+@model FichApp.Pages.RecordsModel
+@{
+    ViewData["Title"] = "Mi historial";
+}
+
+<section class="dashboard">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">TU REGISTRO</p>
+            <h1>Mi historial</h1>
+            <p class="muted">Consulta tus fichajes por periodo.</p>
+        </div>
+        <a class="button button-secondary" asp-page="/Index">Volver al fichaje</a>
+    </div>
+
+    <form method="get" class="filter-bar">
+        <label>Desde <input type="date" name="from" value="@Model.From.ToString("yyyy-MM-dd")" /></label>
+        <label>Hasta <input type="date" name="to" value="@Model.To.ToString("yyyy-MM-dd")" /></label>
+        <button class="button button-primary" type="submit">Consultar</button>
+    </form>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="notice notice-error" role="alert">@Model.ErrorMessage</div>
+    }
+
+    <div class="event-list">
+        @if (Model.Events.Count == 0)
+        {
+            <div class="empty-state">No hay fichajes en este periodo.</div>
+        }
+        @foreach (var item in Model.Events)
+        {
+            <div class="event-row">
+                <span class="event-marker">@item.Marker</span>
+                <div class="event-copy">
+                    <strong>@item.Label</strong>
+                    <span>@item.DateLabel</span>
+                </div>
+                <time datetime="@item.IsoTime">@item.TimeLabel</time>
+            </div>
+        }
+    </div>
+    <p class="privacy-note">Los registros se consultan en modo lectura y se conservan durante al menos cuatro años.</p>
+</section>
